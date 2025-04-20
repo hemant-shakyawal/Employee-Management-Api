@@ -53,5 +53,22 @@ namespace Employee_Management_Api.Controllers
             await _employeeRepository.DeleteEmployeeAsync(id);
             return NoContent();
         }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Employee>> UpdateEmployeeAsync(int id, Employee employee)
+        {
+            if(id != employee.Id)
+            {
+                return BadRequest();
+            }
+
+            if (ModelState.IsValid == false)
+            {
+                return BadRequest();
+            }
+            await _employeeRepository.UpdateEmployeeAsync(employee);
+
+            return CreatedAtAction(nameof(GetEmployeeById), new { id = employee.Id }, employee);
+        }
     }
 }
